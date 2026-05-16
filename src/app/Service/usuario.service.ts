@@ -1,0 +1,47 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import {UsuarioResponse} from '../Models/usuario-response.model';
+import {CrearUsuarioRequest} from '../Models/crear-usuario-request.model';
+import {LoginRequest} from '../Models/login-request.model';
+import {Rol} from '../Models/Enums/rol.enum';
+import {LoginResponse} from '../Models/login-response';
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UsuarioService {
+  private baseUrl = 'http://localhost:8080/usuarios';
+
+  constructor(private http: HttpClient) {
+  }
+
+  crearUsuario(dto: CrearUsuarioRequest): Observable<UsuarioResponse> {
+    return this.http.post<UsuarioResponse>(`${this.baseUrl}/crear`, dto);
+  }
+
+  login(dto: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, dto);
+  }
+
+  obtenerPorId(id: number): Observable<UsuarioResponse> {
+    return this.http.get<UsuarioResponse>(`${this.baseUrl}/${id}`);
+  }
+
+  obtenerUsuarioPorRol(rol: Rol): Observable<UsuarioResponse[]> {
+    return this.http.get<UsuarioResponse[]>(`${this.baseUrl}/rol/${rol}`);
+  }
+
+  obtenerPorCorreo(correo: string): Observable<UsuarioResponse> {
+    return this.http.get<UsuarioResponse>(`${this.baseUrl}/correo/${correo}`);
+  }
+
+  validarUsuarioActivo(id: number): Observable<string> {
+    return this.http.get(`${this.baseUrl}/${id}/activo`, {responseType: 'text'});
+  }
+
+}
+
+
