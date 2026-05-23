@@ -19,8 +19,19 @@ export class UsuarioService {
   }
 
   crearUsuario(dto: CrearUsuarioRequest): Observable<UsuarioResponse> {
-    return this.http.post<UsuarioResponse>(`${this.baseUrl}/crear`, dto);
-  }
+
+  const token = localStorage.getItem('token');
+
+  return this.http.post<UsuarioResponse>(
+    `${this.baseUrl}/admin/crear`,
+    dto,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
 
   login(dto: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, dto);
