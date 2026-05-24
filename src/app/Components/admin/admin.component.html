@@ -1,0 +1,68 @@
+<div class="admin-container">
+
+  <div class="admin-card">
+
+    <h1>Panel de Administración</h1>
+
+    <p class="subtitle">
+      Crear usuarios del sistema
+    </p>
+
+    <input
+      type="text"
+      placeholder="Nombre"
+      [(ngModel)]="usuario.nombre"
+    >
+
+    <input
+      type="email"
+      placeholder="Correo"
+      [(ngModel)]="usuario.correo"
+    >
+
+    <input
+      type="password"
+      placeholder="Contraseña"
+      [(ngModel)]="usuario.password"
+    >
+
+    <select [(ngModel)]="usuario.rol">
+
+      <option
+        *ngFor="let rol of roles"
+        [value]="rol"
+      >
+        {{ rol }}
+      </option>
+
+    </select>
+
+    <div class="button-group">
+
+      <button
+        class="create-btn"
+        (click)="crearUsuario()"
+      >
+        Crear Usuario
+      </button>
+
+      <button
+        class="logout-btn"
+        (click)="volverLogin()"
+      >
+        Volver al Login
+      </button>
+
+    </div>
+
+    <p class="success" *ngIf="mensaje">
+      {{ mensaje }}
+    </p>
+
+    <p class="error" *ngIf="error">
+      {{ error }}
+    </p>
+
+  </div>
+
+</div>
