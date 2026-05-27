@@ -7,7 +7,7 @@ import { CrearUsuarioRequest } from '../Models/crear-usuario-request.model';
 import { LoginRequest } from '../Models/login-request.model';
 import { Rol } from '../Models/Enums/rol.enum';
 import { LoginResponse } from '../Models/login-response';
-import {environment} from '../../environments/environments';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

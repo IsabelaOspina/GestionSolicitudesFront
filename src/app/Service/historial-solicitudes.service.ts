@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {HistorialSolicitudesResponse} from '../Models/historial-solicitudes-response.model';
 import {HistorialSolicitudesRequest} from '../Models/historial-solicitudes-request.model';
-import {environment} from '../../environments/environments';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

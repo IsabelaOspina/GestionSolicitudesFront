@@ -27,7 +27,7 @@ import { EstadoSolicitud } from '../Models/Enums/estado-solicitud.enum';
 import { TipoSolicitud } from '../Models/Enums/tipo-solicitud.enum';
 
 import { NivelPrioridad } from '../Models/Enums/nivel-prioridad.enum';
-import {environment} from '../../environments/environments';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
