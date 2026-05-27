@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -39,12 +39,13 @@ export class AdminComponent {
   mensaje = '';
   error = '';
   cargando = false;
-  nombreUsuario=' '
+  nombreUsuario = ' '
 
   constructor(
     private usuarioService: UsuarioService,
-    private router: Router
-  ) { this.nombreUsuario = localStorage.getItem('nombre') || 'Administrador';}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) { this.nombreUsuario = localStorage.getItem('nombre') || 'Administrador'; }
 
   limpiarMensajes(): void {
     this.mensaje = '';
@@ -68,11 +69,13 @@ export class AdminComponent {
 
         this.listarUsuarios();
         this.cargando = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.log(err);
         this.error = err.error?.message || 'Error al crear usuario';
         this.cargando = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -83,9 +86,11 @@ export class AdminComponent {
     this.usuarioService.listarUsuarios().subscribe({
       next: (data) => {
         this.usuarios = [...data];
+        this.cdr.markForCheck();
       },
       error: () => {
         this.error = 'Error al listar usuarios';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -101,9 +106,11 @@ export class AdminComponent {
     this.usuarioService.obtenerPorId(this.idBusqueda).subscribe({
       next: (usuario) => {
         this.usuarios = [usuario];
+        this.cdr.markForCheck();
       },
       error: () => {
         this.error = 'Usuario no encontrado';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -119,9 +126,11 @@ export class AdminComponent {
     this.usuarioService.obtenerPorCorreo(this.correoBusqueda).subscribe({
       next: (usuario) => {
         this.usuarios = [usuario];
+        this.cdr.markForCheck();
       },
       error: () => {
         this.error = 'Usuario no encontrado';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -132,9 +141,11 @@ export class AdminComponent {
     this.usuarioService.obtenerUsuarioPorRol(this.rolBusqueda).subscribe({
       next: (usuarios) => {
         this.usuarios = [...usuarios];
+        this.cdr.markForCheck();
       },
       error: () => {
         this.error = 'No se encontraron usuarios';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -152,10 +163,12 @@ export class AdminComponent {
             ? { ...u, activo: false }
             : u
         );
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.log(err);
         this.error = err.error?.message || 'Error al inactivar usuario';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -173,10 +186,12 @@ export class AdminComponent {
             ? { ...u, activo: true }
             : u
         );
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.log(err);
         this.error = err.error?.message || 'Error al activar usuario';
+        this.cdr.markForCheck();
       }
     });
   }
