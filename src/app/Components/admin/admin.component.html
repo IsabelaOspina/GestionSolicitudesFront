@@ -5,61 +5,265 @@
     <h1>Panel de Administración</h1>
 
     <p class="subtitle">
-      Crear usuarios del sistema
+      Gestión completa de usuarios
     </p>
 
-    <input
-      type="text"
-      placeholder="Nombre"
-      [(ngModel)]="usuario.nombre"
-    >
+    <!-- CREAR USUARIO -->
 
-    <input
-      type="email"
-      placeholder="Correo"
-      [(ngModel)]="usuario.correo"
-    >
+    <div class="section">
 
-    <input
-      type="password"
-      placeholder="Contraseña"
-      [(ngModel)]="usuario.password"
-    >
+      <h2>Crear Usuario</h2>
 
-    <select [(ngModel)]="usuario.rol">
+      <div class="form-grid">
 
-      <option
-        *ngFor="let rol of roles"
-        [value]="rol"
-      >
-        {{ rol }}
-      </option>
+        <input
+          type="text"
+          placeholder="Nombre"
+          [(ngModel)]="usuario.nombre"
+        >
 
-    </select>
+        <input
+          type="email"
+          placeholder="Correo"
+          [(ngModel)]="usuario.correo"
+        >
 
-    <div class="button-group">
+        <input
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="usuario.password"
+        >
 
-      <button
-        class="create-btn"
-        (click)="crearUsuario()"
-      >
-        Crear Usuario
-      </button>
+        <select [(ngModel)]="usuario.rol">
 
-      <button
-        class="logout-btn"
-        (click)="volverLogin()"
-      >
-        Volver al Login
-      </button>
+          <option
+            *ngFor="let rol of roles"
+            [ngValue]="rol"
+          >
+            {{ rol }}
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="button-group">
+
+        <button
+          type="button"
+          class="create-btn"
+          (click)="crearUsuario()"
+        >
+          Crear Usuario
+        </button>
+
+        <button
+          type="button"
+          class="logout-btn"
+          (click)="volverLogin()"
+        >
+          Volver al Login
+        </button>
+
+      </div>
 
     </div>
 
-    <p class="success" *ngIf="mensaje">
+    <!-- BUSCAR POR ID -->
+
+    <div class="section">
+
+      <h2>Buscar por ID</h2>
+
+      <div class="form-grid">
+
+        <input
+          type="number"
+          placeholder="ID Usuario"
+          [(ngModel)]="idBusqueda"
+        >
+
+      </div>
+
+      <div class="button-group">
+
+        <button
+          type="button"
+          class="search-btn"
+          (click)="buscarPorId()"
+        >
+          Buscar
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- BUSCAR POR CORREO -->
+
+    <div class="section">
+
+      <h2>Buscar por Correo</h2>
+
+      <div class="form-grid">
+
+        <input
+          type="email"
+          placeholder="Correo"
+          [(ngModel)]="correoBusqueda"
+        >
+
+      </div>
+
+      <div class="button-group">
+
+        <button
+          type="button"
+          class="search-btn"
+          (click)="buscarPorCorreo()"
+        >
+          Buscar
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- BUSCAR POR ROL -->
+
+    <div class="section">
+
+      <h2>Buscar por Rol</h2>
+
+      <div class="form-grid">
+
+        <select [(ngModel)]="rolBusqueda">
+
+          <option
+            *ngFor="let rol of roles"
+            [ngValue]="rol"
+          >
+            {{ rol }}
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="button-group">
+
+        <button
+          type="button"
+          class="search-btn"
+          (click)="buscarPorRol()"
+        >
+          Buscar
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- LISTAR -->
+
+    <div class="section">
+
+      <h2>Usuarios Registrados</h2>
+
+      <div class="button-group">
+
+        <button
+          type="button"
+          class="search-btn"
+          (click)="listarUsuarios()"
+        >
+          Listar Usuarios
+        </button>
+
+      </div>
+
+      <div
+        class="user-list"
+        *ngIf="usuarios.length > 0"
+      >
+
+        <div
+          class="user-card"
+          *ngFor="let u of usuarios"
+        >
+
+          <p>
+            <strong>ID:</strong>
+            {{ u.idUsuario }}
+          </p>
+
+          <p>
+            <strong>Nombre:</strong>
+            {{ u.nombreUsuario }}
+          </p>
+
+          <p>
+            <strong>Correo:</strong>
+            {{ u.correoElectronico }}
+          </p>
+
+          <p>
+            <strong>Rol:</strong>
+            {{ u.rol }}
+          </p>
+
+          <p>
+            <strong>Estado:</strong>
+
+            <span *ngIf="u.activo">
+              Activo
+            </span>
+
+            <span *ngIf="!u.activo">
+              Inactivo
+            </span>
+
+          </p>
+
+          <div class="button-group">
+
+            <button
+              type="button"
+              class="activate-btn"
+              [disabled]="u.activo"
+              (click)="activarUsuario(u.idUsuario)"
+            >
+              Activar
+            </button>
+
+            <button
+              type="button"
+              class="deactivate-btn"
+              [disabled]="!u.activo"
+              (click)="inactivarUsuario(u.idUsuario)"
+            >
+              Inactivar
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <p
+      class="success"
+      *ngIf="mensaje"
+    >
       {{ mensaje }}
     </p>
 
-    <p class="error" *ngIf="error">
+    <p
+      class="error"
+      *ngIf="error"
+    >
       {{ error }}
     </p>
 

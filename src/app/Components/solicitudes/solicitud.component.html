@@ -1,0 +1,214 @@
+<!-- solicitud.component.html -->
+
+<div class="page-background">
+
+  <div class="main-container">
+
+    <div class="header">
+
+      <h1>Mis Solicitudes</h1>
+
+      <p>
+        Gestiona y consulta tus solicitudes académicas
+      </p>
+
+    </div>
+
+    <!-- MENSAJES -->
+
+    <div
+      class="success"
+      *ngIf="mensaje">
+
+      {{ mensaje }}
+
+    </div>
+
+    <div
+      class="error"
+      *ngIf="error">
+
+      {{ error }}
+
+    </div>
+
+    <!-- FORMULARIO -->
+
+    <div class="card">
+
+      <h2>Nueva Solicitud</h2>
+
+      <div class="form-group">
+
+        <label>
+          Descripción
+        </label>
+
+        <textarea
+          rows="5"
+          placeholder="Describe tu solicitud..."
+          [(ngModel)]="nuevaSolicitud.descripcion">
+
+        </textarea>
+
+      </div>
+
+      <div class="grid">
+
+        <div class="form-group">
+
+          <label>
+            Tipo Solicitud
+          </label>
+
+          <select
+            [(ngModel)]="nuevaSolicitud.tipoSolicitud">
+
+            <option
+              *ngFor="let tipo of tiposSolicitud"
+              [value]="tipo">
+
+              {{ tipo }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Canal de Origen
+          </label>
+
+          <select
+            [(ngModel)]="nuevaSolicitud.canalOrigen">
+
+            <option
+              *ngFor="let canal of canalesOrigen"
+              [value]="canal">
+
+              {{ canal }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="registrarSolicitud()">
+
+        Registrar Solicitud
+
+      </button>
+
+    </div>
+
+    <!-- BOTÓN CONSULTAR -->
+
+    <div class="actions">
+
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="obtenerMisSolicitudes()">
+
+        Ver Mis Solicitudes
+
+      </button>
+
+    </div>
+
+    <!-- TABLA -->
+
+    <div
+      class="card"
+      *ngIf="mostrarTabla">
+
+      <h2>Historial de Solicitudes</h2>
+
+      <div
+        *ngIf="cargando"
+        class="loading">
+
+        Cargando solicitudes...
+
+      </div>
+
+      <div
+        *ngIf="!cargando && solicitudes.length === 0"
+        class="empty">
+
+        No tienes solicitudes registradas.
+
+      </div>
+
+      <table
+        *ngIf="!cargando && solicitudes.length > 0">
+
+        <thead>
+
+          <tr>
+
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Fecha</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let solicitud of solicitudes">
+
+            <td>
+              {{ solicitud.idSolicitud }}
+            </td>
+
+            <td>
+              {{ solicitud.tipoSolicitud }}
+            </td>
+
+            <td>
+
+              <span class="estado">
+
+                {{ solicitud.estadoSolicitud }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              {{ solicitud.nivelPrioridad || 'SIN PRIORIDAD' }}
+
+            </td>
+
+            <td>
+
+              {{ solicitud.fechaHoraRegistro | date:'short' }}
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
