@@ -1,6 +1,6 @@
 // solicitud.component.ts
 
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -60,8 +60,9 @@ export class SolicitudComponent {
 
   constructor(
     private solicitudService: SolicitudService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   obtenerMisSolicitudes(): void {
 
@@ -80,6 +81,7 @@ export class SolicitudComponent {
           this.solicitudes = data;
 
           this.cargando = false;
+          this.cdr.markForCheck();
         },
 
         error: (err) => {
@@ -90,6 +92,7 @@ export class SolicitudComponent {
             'Error al obtener solicitudes';
 
           this.cargando = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -135,6 +138,7 @@ export class SolicitudComponent {
             canalOrigen:
               CanalOrigen.CORREO_ELECTRONICO
           };
+          this.cdr.markForCheck();
         },
 
         error: (err) => {
@@ -143,6 +147,7 @@ export class SolicitudComponent {
 
           this.error =
             'Error al registrar solicitud';
+          this.cdr.markForCheck();
         }
       });
   }

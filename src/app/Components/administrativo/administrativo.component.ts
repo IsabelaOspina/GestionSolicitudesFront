@@ -1,6 +1,6 @@
 // admin-panel.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -44,19 +44,19 @@ export class AdministrativoComponent implements OnInit {
 
   /* ── Enums expuestos a la plantilla ── */
   estados: EstadoSolicitud[] = Object.values(EstadoSolicitud);
-  tipos: TipoSolicitud[]     = Object.values(TipoSolicitud);
+  tipos: TipoSolicitud[] = Object.values(TipoSolicitud);
   prioridades: NivelPrioridad[] = Object.values(NivelPrioridad);
 
   /* ── Tabs de navegación ── */
   tabs: { key: TabKey; label: string; icon: string }[] = [
-    { key: 'consultar',       label: 'Consultar',        icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5l3 3" stroke-linecap="round"/></svg>' },
-    { key: 'priorizar',       label: 'Priorizar',        icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M4 6l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
-    { key: 'asignar',         label: 'Asignar',          icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke-linecap="round"/></svg>' },
-    { key: 'atender',         label: 'Atender',          icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
-    { key: 'cerrar',          label: 'Cerrar',           icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round"/></svg>' },
-    { key: 'mis-solicitudes', label: 'Mis Solicitudes',  icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7h6M5 10h4" stroke-linecap="round"/></svg>' },
-    { key: 'resumen',         label: 'Resumen IA',       icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M6 6.5C6 5.12 6.9 4 8 4s2 1.12 2 2.5c0 1.5-2 3-2 3" stroke-linecap="round"/><circle cx="8" cy="12" r="0.7" fill="currentColor" stroke="none"/></svg>' },
-    { key: 'historial',       label: 'Historial',        icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2.5 2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'consultar', label: 'Consultar', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5l3 3" stroke-linecap="round"/></svg>' },
+    { key: 'priorizar', label: 'Priorizar', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M4 6l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'asignar', label: 'Asignar', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke-linecap="round"/></svg>' },
+    { key: 'atender', label: 'Atender', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'cerrar', label: 'Cerrar', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round"/></svg>' },
+    { key: 'mis-solicitudes', label: 'Mis Solicitudes', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7h6M5 10h4" stroke-linecap="round"/></svg>' },
+    { key: 'resumen', label: 'Resumen IA', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M6 6.5C6 5.12 6.9 4 8 4s2 1.12 2 2.5c0 1.5-2 3-2 3" stroke-linecap="round"/><circle cx="8" cy="12" r="0.7" fill="currentColor" stroke="none"/></svg>' },
+    { key: 'historial', label: 'Historial', icon: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2.5 2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
   ];
 
   get currentTabLabel(): string {
@@ -71,27 +71,27 @@ export class AdministrativoComponent implements OnInit {
   historial: HistorialSolicitudesResponse[] = [];
 
   /* ── Filtros ── */
-  filtroEstado     = '';
-  filtroTipo       = '';
-  filtroPrioridad  = '';
+  filtroEstado = '';
+  filtroTipo = '';
+  filtroPrioridad = '';
   filtroResponsableId: number | null = null;
   filtroSolicitanteId: number | null = null;
-  filtroDesde      = '';
-  filtroHasta      = '';
+  filtroDesde = '';
+  filtroHasta = '';
   filtroEstadoCombo = '';
-  filtroTipoCombo   = '';
+  filtroTipoCombo = '';
 
   /* ── Formulario priorizar ── */
   priorizarForm = {
-    idSolicitud:  null as number | null,
-    impacto:      '',
-    justificacion:'',
-    usarIA:       false,
+    idSolicitud: null as number | null,
+    impacto: '',
+    justificacion: '',
+    usarIA: false,
   };
 
   /* ── Formulario asignar ── */
   asignarForm = {
-    idSolicitud:   null as number | null,
+    idSolicitud: null as number | null,
     idResponsable: null as number | null,
   };
 
@@ -103,20 +103,21 @@ export class AdministrativoComponent implements OnInit {
 
   /* ── Formulario cerrar ── */
   cerrarForm = {
-    idSolicitud:       null as number | null,
+    idSolicitud: null as number | null,
     observacionCierre: '',
   };
 
   /* ── Resumen / Historial ── */
-  resumenIdSolicitud:  number | null = null;
+  resumenIdSolicitud: number | null = null;
   historialIdSolicitud: number | null = null;
 
   constructor(
     private solicitudSvc: SolicitudService,
     private historialSvc: HistorialSolicitudesService,
-  ) {}
+    private cdr: ChangeDetectorRef,
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   /* ═══════════════════════════════════════
       NAV
@@ -145,6 +146,7 @@ export class AdministrativoComponent implements OnInit {
     this.errorMsg = err?.error?.message ?? 'Error al procesar la solicitud.';
     this.globalStatus = 'error';
     this.globalStatusText = 'Error';
+    this.cdr.markForCheck();
   }
 
   private handleSuccess(msg: string): void {
@@ -152,7 +154,8 @@ export class AdministrativoComponent implements OnInit {
     this.successMsg = msg;
     this.globalStatus = 'ok';
     this.globalStatusText = 'OK';
-    setTimeout(() => { this.globalStatus = ''; this.globalStatusText = 'Sistema activo'; }, 3000);
+    this.cdr.markForCheck();
+    setTimeout(() => { this.globalStatus = ''; this.globalStatusText = 'Sistema activo'; this.cdr.markForCheck(); }, 3000);
   }
 
   /* ═══════════════════════════════════════
@@ -163,7 +166,7 @@ export class AdministrativoComponent implements OnInit {
     if (!this.filtroEstado) return;
     this.loading = true;
     this.solicitudSvc.consultarPorEstado(this.filtroEstado as EstadoSolicitud).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -172,7 +175,7 @@ export class AdministrativoComponent implements OnInit {
     if (!this.filtroTipo) return;
     this.loading = true;
     this.solicitudSvc.consultarPorTipo(this.filtroTipo as TipoSolicitud).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -181,7 +184,7 @@ export class AdministrativoComponent implements OnInit {
     if (!this.filtroPrioridad) return;
     this.loading = true;
     this.solicitudSvc.consultarPorPrioridad(this.filtroPrioridad as NivelPrioridad).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -190,7 +193,7 @@ export class AdministrativoComponent implements OnInit {
     if (!this.filtroResponsableId) return;
     this.loading = true;
     this.solicitudSvc.consultarPorResponsable(this.filtroResponsableId).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -199,7 +202,7 @@ export class AdministrativoComponent implements OnInit {
     if (!this.filtroSolicitanteId) return;
     this.loading = true;
     this.solicitudSvc.consultarPorSolicitante(this.filtroSolicitanteId).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -211,7 +214,7 @@ export class AdministrativoComponent implements OnInit {
     }
     this.loading = true;
     this.solicitudSvc.consultarPorRangoFechas(this.filtroDesde, this.filtroHasta).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -228,7 +231,7 @@ export class AdministrativoComponent implements OnInit {
         this.filtroTipoCombo as TipoSolicitud,
       )
       .subscribe({
-        next: data => { this.solicitudes = data; this.loading = false; },
+        next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
         error: err => this.handleError(err),
       });
   }
@@ -314,7 +317,7 @@ export class AdministrativoComponent implements OnInit {
   cargarMisSolicitudes(): void {
     this.loading = true;
     this.solicitudSvc.obtenerMisSolicitudes().subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -372,7 +375,7 @@ export class AdministrativoComponent implements OnInit {
     this.loading = true;
     this.historial = [];
     this.historialSvc.obtenerHistorialPorSolicitud(this.historialIdSolicitud).subscribe({
-      next: data => { this.historial = data; this.loading = false; },
+      next: data => { this.historial = data; this.loading = false; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }

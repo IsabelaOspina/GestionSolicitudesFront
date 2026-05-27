@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
@@ -22,8 +22,9 @@ export class LoginComponent {
 
   constructor(
     private usuarioService: UsuarioService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   login(): void {
 
@@ -66,6 +67,7 @@ export class LoginComponent {
 
       error: () => {
         this.error = 'Credenciales incorrectas';
+        this.cdr.markForCheck();
       }
     });
   }
