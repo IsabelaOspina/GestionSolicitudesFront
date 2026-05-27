@@ -27,6 +27,7 @@ import { EstadoSolicitud } from '../Models/Enums/estado-solicitud.enum';
 import { TipoSolicitud } from '../Models/Enums/tipo-solicitud.enum';
 
 import { NivelPrioridad } from '../Models/Enums/nivel-prioridad.enum';
+import {environment} from '../../environments/environments';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +35,7 @@ import { NivelPrioridad } from '../Models/Enums/nivel-prioridad.enum';
 
 export class SolicitudService {
 
-  private baseUrl =
-    'http://localhost:8080/solicitudes';
+  private baseUrl = `${environment.apiUrl}/solicitudes`;
 
   constructor(
     private http: HttpClient
