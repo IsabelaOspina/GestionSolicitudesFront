@@ -43,6 +43,7 @@ export class LoginComponent {
         );
 
         const rol = payload.role;
+        console.log('payload:', payload);
 
         localStorage.setItem('rol', rol);
 

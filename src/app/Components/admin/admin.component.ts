@@ -39,11 +39,12 @@ export class AdminComponent {
   mensaje = '';
   error = '';
   cargando = false;
+  nombreUsuario=' '
 
   constructor(
     private usuarioService: UsuarioService,
     private router: Router
-  ) {}
+  ) { this.nombreUsuario = localStorage.getItem('nombre') || 'Administrador';}
 
   limpiarMensajes(): void {
     this.mensaje = '';

@@ -1,272 +1,266 @@
-<div class="admin-container">
+<!-- admin.component.html -->
+<div class="admin-shell">
 
-  <div class="admin-card">
-
-    <h1>Panel de Administración</h1>
-
-    <p class="subtitle">
-      Gestión completa de usuarios
-    </p>
-
-    <!-- CREAR USUARIO -->
-
-    <div class="section">
-
-      <h2>Crear Usuario</h2>
-
-      <div class="form-grid">
-
-        <input
-          type="text"
-          placeholder="Nombre"
-          [(ngModel)]="usuario.nombre"
-        >
-
-        <input
-          type="email"
-          placeholder="Correo"
-          [(ngModel)]="usuario.correo"
-        >
-
-        <input
-          type="password"
-          placeholder="Contraseña"
-          [(ngModel)]="usuario.password"
-        >
-
-        <select [(ngModel)]="usuario.rol">
-
-          <option
-            *ngFor="let rol of roles"
-            [ngValue]="rol"
-          >
-            {{ rol }}
-          </option>
-
-        </select>
-
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+          <circle cx="19" cy="19" r="18" fill="rgba(255,255,255,0.12)"/>
+          <path d="M19 10L7 16.5L19 23L31 16.5L19 10Z" fill="white" opacity="0.95"/>
+          <path d="M31 16.5V23.5" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+          <circle cx="31" cy="25" r="1.4" fill="white" opacity="0.7"/>
+          <rect x="13" y="24.5" width="12" height="1.5" rx="0.75" fill="white" opacity="0.55"/>
+          <rect x="15" y="27"   width="8"  height="1.5" rx="0.75" fill="white" opacity="0.35"/>
+        </svg>
       </div>
-
-      <div class="button-group">
-
-        <button
-          type="button"
-          class="create-btn"
-          (click)="crearUsuario()"
-        >
-          Crear Usuario
-        </button>
-
-        <button
-          type="button"
-          class="logout-btn"
-          (click)="volverLogin()"
-        >
-          Volver al Login
-        </button>
-
+      <div class="brand-text">
+        <span class="brand-name">Gestión de Solicitudes</span>
+        <span class="brand-name2">Académicas</span>
+        <span class="brand-sub">Portal Administrador</span>
       </div>
-
     </div>
 
-    <!-- BUSCAR POR ID -->
+    <p class="nav-section-label">Módulos</p>
 
-    <div class="section">
+    <nav class="sidebar-nav">
+      <button class="nav-item active">
+        <i class="ti ti-users nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Gestión de Usuarios</span>
+        <span class="nav-arrow">›</span>
+      </button>
+    </nav>
 
-      <h2>Buscar por ID</h2>
-
-      <div class="form-grid">
-
-        <input
-          type="number"
-          placeholder="ID Usuario"
-          [(ngModel)]="idBusqueda"
-        >
-
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <span class="user-avatar">{{ nombreUsuario.substring(0,2).toUpperCase() }}</span>
+        <div class="user-info">
+          <span class="user-name">{{ nombreUsuario }}</span>
+          <span class="user-role">Sesión activa</span>
+        </div>
       </div>
+      <button class="logout-btn" (click)="volverLogin()" title="Cerrar sesión">
+        <i class="ti ti-logout" aria-hidden="true"></i>
+        <span>Salir</span>
+      </button>
+    </div>
+  </aside>
 
-      <div class="button-group">
+  <!-- ══ MAIN ══ -->
+  <main class="main-content">
 
-        <button
-          type="button"
-          class="search-btn"
-          (click)="buscarPorId()"
-        >
-          Buscar
-        </button>
-
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <p class="topbar-breadcrumb">Panel / Gestión de Usuarios</p>
+        <h1 class="topbar-title">Gestión de Usuarios</h1>
       </div>
+      <span class="status-badge">
+        <span class="status-dot"></span>Sistema activo
+      </span>
+    </header>
 
+    <!-- ALERTS -->
+    <div *ngIf="mensaje" class="alert alert-success">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      <span>{{ mensaje }}</span>
+      <button class="alert-close" (click)="mensaje = ''"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div *ngIf="error" class="alert alert-error">
+      <i class="ti ti-alert-circle" aria-hidden="true"></i>
+      <span>{{ error }}</span>
+      <button class="alert-close" (click)="error = ''"><i class="ti ti-x" aria-hidden="true"></i></button>
     </div>
 
-    <!-- BUSCAR POR CORREO -->
+    <!-- CONTENT -->
+    <div class="page-body">
 
-    <div class="section">
-
-      <h2>Buscar por Correo</h2>
-
-      <div class="form-grid">
-
-        <input
-          type="email"
-          placeholder="Correo"
-          [(ngModel)]="correoBusqueda"
-        >
-
-      </div>
-
-      <div class="button-group">
-
-        <button
-          type="button"
-          class="search-btn"
-          (click)="buscarPorCorreo()"
-        >
-          Buscar
-        </button>
-
-      </div>
-
-    </div>
-
-    <!-- BUSCAR POR ROL -->
-
-    <div class="section">
-
-      <h2>Buscar por Rol</h2>
-
-      <div class="form-grid">
-
-        <select [(ngModel)]="rolBusqueda">
-
-          <option
-            *ngFor="let rol of roles"
-            [ngValue]="rol"
-          >
-            {{ rol }}
-          </option>
-
-        </select>
-
-      </div>
-
-      <div class="button-group">
-
-        <button
-          type="button"
-          class="search-btn"
-          (click)="buscarPorRol()"
-        >
-          Buscar
-        </button>
-
-      </div>
-
-    </div>
-
-    <!-- LISTAR -->
-
-    <div class="section">
-
-      <h2>Usuarios Registrados</h2>
-
-      <div class="button-group">
-
-        <button
-          type="button"
-          class="search-btn"
-          (click)="listarUsuarios()"
-        >
-          Listar Usuarios
-        </button>
-
-      </div>
-
-      <div
-        class="user-list"
-        *ngIf="usuarios.length > 0"
-      >
-
-        <div
-          class="user-card"
-          *ngFor="let u of usuarios"
-        >
-
-          <p>
-            <strong>ID:</strong>
-            {{ u.idUsuario }}
-          </p>
-
-          <p>
-            <strong>Nombre:</strong>
-            {{ u.nombreUsuario }}
-          </p>
-
-          <p>
-            <strong>Correo:</strong>
-            {{ u.correoElectronico }}
-          </p>
-
-          <p>
-            <strong>Rol:</strong>
-            {{ u.rol }}
-          </p>
-
-          <p>
-            <strong>Estado:</strong>
-
-            <span *ngIf="u.activo">
-              Activo
-            </span>
-
-            <span *ngIf="!u.activo">
-              Inactivo
-            </span>
-
-          </p>
-
-          <div class="button-group">
-
-            <button
-              type="button"
-              class="activate-btn"
-              [disabled]="u.activo"
-              (click)="activarUsuario(u.idUsuario)"
-            >
-              Activar
-            </button>
-
-            <button
-              type="button"
-              class="deactivate-btn"
-              [disabled]="!u.activo"
-              (click)="inactivarUsuario(u.idUsuario)"
-            >
-              Inactivar
-            </button>
-
+      <!-- CREAR USUARIO -->
+      <div class="content-card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <i class="ti ti-user-plus card-icon" aria-hidden="true"></i>
+            <div>
+              <h2 class="card-title">Crear usuario</h2>
+              <p class="card-desc">Registra un nuevo usuario en el sistema</p>
+            </div>
           </div>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-field">
+              <label>Nombre completo</label>
+              <input type="text" placeholder="Ej: Juan Pérez" [(ngModel)]="usuario.nombre" />
+            </div>
+            <div class="form-field">
+              <label>Correo electrónico</label>
+              <input type="email" placeholder="correo@uniquindio.edu.co" [(ngModel)]="usuario.correo" />
+            </div>
+            <div class="form-field">
+              <label>Contraseña</label>
+              <input type="password" placeholder="Mínimo 8 caracteres" [(ngModel)]="usuario.password" />
+            </div>
+            <div class="form-field">
+              <label>Rol</label>
+              <select [(ngModel)]="usuario.rol">
+                <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="action-row">
+            <button class="btn-primary" (click)="crearUsuario()" [disabled]="cargando">
+              <i class="ti ti-user-plus" aria-hidden="true"></i>
+              {{ cargando ? 'Creando…' : 'Crear usuario' }}
+            </button>
+          </div>
+        </div>
+      </div>
 
+      <!-- BUSQUEDAS -->
+      <div class="search-grid">
+
+        <!-- Por ID -->
+        <div class="content-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <i class="ti ti-hash card-icon" aria-hidden="true"></i>
+              <div>
+                <h2 class="card-title">Buscar por ID</h2>
+                <p class="card-desc">Localiza un usuario por su identificador</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-field">
+              <label>ID de usuario</label>
+              <input type="number" placeholder="Ej: 5" [(ngModel)]="idBusqueda" />
+            </div>
+            <div class="action-row">
+              <button class="btn-outline" (click)="buscarPorId()">
+                <i class="ti ti-search" aria-hidden="true"></i> Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Por Correo -->
+        <div class="content-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <i class="ti ti-mail card-icon" aria-hidden="true"></i>
+              <div>
+                <h2 class="card-title">Buscar por correo</h2>
+                <p class="card-desc">Localiza un usuario por su correo</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-field">
+              <label>Correo electrónico</label>
+              <input type="email" placeholder="correo@uniquindio.edu.co" [(ngModel)]="correoBusqueda" />
+            </div>
+            <div class="action-row">
+              <button class="btn-outline" (click)="buscarPorCorreo()">
+                <i class="ti ti-search" aria-hidden="true"></i> Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Por Rol -->
+        <div class="content-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <i class="ti ti-shield card-icon" aria-hidden="true"></i>
+              <div>
+                <h2 class="card-title">Buscar por rol</h2>
+                <p class="card-desc">Filtra usuarios según su rol asignado</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-field">
+              <label>Rol</label>
+              <select [(ngModel)]="rolBusqueda">
+                <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol }}</option>
+              </select>
+            </div>
+            <div class="action-row">
+              <button class="btn-outline" (click)="buscarPorRol()">
+                <i class="ti ti-search" aria-hidden="true"></i> Buscar
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>
 
+      <!-- LISTAR USUARIOS -->
+      <div class="content-card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <i class="ti ti-list card-icon" aria-hidden="true"></i>
+            <div>
+              <h2 class="card-title">Usuarios registrados</h2>
+              <p class="card-desc">Lista completa de usuarios en el sistema</p>
+            </div>
+          </div>
+          <button class="btn-outline btn-sm" (click)="listarUsuarios()">
+            <i class="ti ti-refresh" aria-hidden="true"></i> Cargar
+          </button>
+        </div>
+
+        <div *ngIf="usuarios.length > 0" class="card-body no-top-pad">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let u of usuarios">
+                <td><span class="id-pill">#{{ u.idUsuario }}</span></td>
+                <td class="name-cell">{{ u.nombreUsuario }}</td>
+                <td class="muted-cell">{{ u.correoElectronico }}</td>
+                <td><span class="badge badge-rol">{{ u.rol }}</span></td>
+                <td>
+                    <span class="badge" [class]="u.activo ? 'badge-activo' : 'badge-inactivo'">
+                      {{ u.activo ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </td>
+                <td>
+                  <div class="action-group">
+                    <button class="btn-action btn-action--activate"
+                            [disabled]="u.activo"
+                            (click)="activarUsuario(u.idUsuario)">
+                      Activar
+                    </button>
+                    <button class="btn-action btn-action--deactivate"
+                            [disabled]="!u.activo"
+                            (click)="inactivarUsuario(u.idUsuario)">
+                      Inactivar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div *ngIf="usuarios.length === 0" class="empty-state">
+          <i class="ti ti-users empty-icon" aria-hidden="true"></i>
+          <p class="empty-title">Sin usuarios</p>
+          <p class="empty-sub">Haz clic en "Cargar" para ver los usuarios registrados</p>
+        </div>
+      </div>
+
     </div>
-
-    <p
-      class="success"
-      *ngIf="mensaje"
-    >
-      {{ mensaje }}
-    </p>
-
-    <p
-      class="error"
-      *ngIf="error"
-    >
-      {{ error }}
-    </p>
-
-  </div>
-
+  </main>
 </div>
