@@ -1,48 +1,80 @@
-<div class="admin-background">
+<!-- login.component.html -->
+<div class="login-shell">
 
-  <div class="admin-card">
-
-    <h1>Sistema de Gestión</h1>
-
-    <p class="subtitle">
-      Inicia sesión para continuar
-    </p>
-
-    <div class="form-group">
-
-      <label>Correo electrónico</label>
-
-      <input
-        type="email"
-        placeholder="admin@sistema.com"
-        [(ngModel)]="correoElectronico"
-      >
-
+  <div class="login-left">
+    <div class="brand-block">
+      <div class="brand-logo">
+        <svg width="48" height="48" viewBox="0 0 38 38" fill="none">
+          <circle cx="19" cy="19" r="18" fill="rgba(255,255,255,0.12)"/>
+          <path d="M19 10L7 16.5L19 23L31 16.5L19 10Z" fill="white" opacity="0.95"/>
+          <path d="M31 16.5V23.5" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+          <circle cx="31" cy="25" r="1.4" fill="white" opacity="0.7"/>
+          <rect x="13" y="24.5" width="12" height="1.5" rx="0.75" fill="white" opacity="0.55"/>
+          <rect x="15" y="27"   width="8"  height="1.5" rx="0.75" fill="white" opacity="0.35"/>
+        </svg>
+      </div>
+      <h1 class="brand-title">Gestión de Solicitudes<br>Académicas</h1>
+      <p class="brand-sub">Universidad del Quindío</p>
     </div>
 
-    <div class="form-group">
-
-      <label>Contraseña</label>
-
-      <input
-        type="password"
-        placeholder="********"
-        [(ngModel)]="password"
-      >
-
+    <div class="left-features">
+      <div class="feature-item">
+        <span class="feature-icon">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7h6M5 10h4" stroke-linecap="round"/></svg>
+        </span>
+        <span>Gestión integral de solicitudes estudiantiles</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Seguimiento y trazabilidad en tiempo real</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M6 6.5C6 5.12 6.9 4 8 4s2 1.12 2 2.5c0 1.5-2 3-2 3" stroke-linecap="round"/><circle cx="8" cy="12" r=".7" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span>Asistencia con inteligencia artificial</span>
+      </div>
     </div>
+  </div>
 
-    <button
-      class="btn-primary"
-      (click)="login()"
-    >
-      Ingresar
-    </button>
+  <div class="login-right">
+    <div class="login-card">
+      <div class="login-header">
+        <h2 class="login-title">Iniciar sesión</h2>
+        <p class="login-desc">Ingresa tus credenciales para acceder al sistema</p>
+      </div>
 
-    <p class="error" *ngIf="error">
-      {{ error }}
-    </p>
+      <div class="login-body">
+        <div class="form-field">
+          <label>Correo electrónico</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 5l6 4.5L14 5" stroke-linecap="round"/></svg>
+            <input type="email" placeholder="correo@uniquindio.edu.co" [(ngModel)]="correoElectronico" (keyup.enter)="login()" />
+          </div>
+        </div>
 
+        <div class="form-field">
+          <label>Contraseña</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round"/></svg>
+            <input type="password" placeholder="••••••••" [(ngModel)]="password" (keyup.enter)="login()" />
+          </div>
+        </div>
+
+        <div *ngIf="error" class="alert-error">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11" r=".75" fill="currentColor"/></svg>
+          <span>{{ error }}</span>
+        </div>
+
+        <button class="btn-login" (click)="login()">
+          Ingresar al sistema
+        </button>
+
+        <p class="login-footer">Universidad del Quindío · Sistema Académico</p>
+      </div>
+    </div>
   </div>
 
 </div>

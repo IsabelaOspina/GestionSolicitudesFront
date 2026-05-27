@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+/* Garantizar que html y body no generen scroll extra */
 html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
 
@@ -185,9 +186,12 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
 /* footer */
 .sidebar-footer {
-  padding: 14px;
+  padding: 12px;
   border-top: 1px solid rgba(255,255,255,.08);
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .user-chip { display: flex; align-items: center; gap: 9px; }
@@ -533,7 +537,7 @@ button:disabled { opacity: .42; cursor: not-allowed; transform: none !important;
 /* ========================================================
    FORM CARD
 ======================================================== */
-.form-card { max-width: 560px; overflow: hidden; }
+.form-card { max-width: 560px; }
 
 .form-card-header {
   padding: 18px 24px 14px;
@@ -699,7 +703,22 @@ button:disabled { opacity: .42; cursor: not-allowed; transform: none !important;
 ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
 
-.tab-panel {
-  overflow-y: auto !important;
-  height: 0;
+/* ── Fix doble clic / foco ── */
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
 }
+.logout-btn {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: transparent; border-radius: 5px;
+  color: rgba(255,255,255,.6); font-size: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer; transition: all .15s;
+}
+.logout-btn:hover {
+  background: rgba(255,255,255,.08); color: #fff;
+}
+.logout-btn svg { flex-shrink: 0; }

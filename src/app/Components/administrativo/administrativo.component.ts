@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -12,6 +12,7 @@ import { HistorialSolicitudesResponse } from '../../Models/historial-solicitudes
 import { EstadoSolicitud } from '../../Models/Enums/estado-solicitud.enum';
 import { TipoSolicitud } from '../../Models/Enums/tipo-solicitud.enum';
 import { NivelPrioridad } from '../../Models/Enums/nivel-prioridad.enum';
+import {Router} from '@angular/router';
 
 type TabKey =
   | 'consultar'
@@ -32,20 +33,18 @@ type TabKey =
 })
 export class AdministrativoComponent implements OnInit {
 
-  /* ── Estado global ── */
   activeTab: TabKey = 'consultar';
-  loading = false;
   errorMsg = '';
   successMsg = '';
   globalStatus: 'ok' | 'error' | '' = '';
   globalStatusText = 'Sistema activo';
+  nombreUsuario = '';
+  loading = false;
 
-  /* ── Enums expuestos a la plantilla ── */
   estados: EstadoSolicitud[] = Object.values(EstadoSolicitud);
   tipos: TipoSolicitud[]     = Object.values(TipoSolicitud);
   prioridades: NivelPrioridad[] = Object.values(NivelPrioridad);
 
-  /* ── Tabs de navegación ── */
   tabs: { key: TabKey; label: string; icon: string }[] = [
     { key: 'consultar',       label: 'Consultar',       icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5l3 3" stroke-linecap="round"/></svg>' },
     { key: 'priorizar',       label: 'Priorizar',       icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M4 6l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
@@ -61,25 +60,22 @@ export class AdministrativoComponent implements OnInit {
     return this.tabs.find(t => t.key === this.activeTab)?.label ?? '';
   }
 
-  /* ── Resultados compartidos ── */
   solicitudes: SolicitudResponse[] = [];
   solicitudSeleccionada: SolicitudResponse | null = null;
   solicitudResultado: SolicitudResponse | null = null;
   resumenResultado: ResumenSolicitudResponse | null = null;
   historial: HistorialSolicitudesResponse[] = [];
 
-  /* ── Filtros ── */
-  filtroEstado     = '';
-  filtroTipo       = '';
-  filtroPrioridad  = '';
+  filtroEstado      = '';
+  filtroTipo        = '';
+  filtroPrioridad   = '';
   filtroResponsableId: number | null = null;
   filtroSolicitanteId: number | null = null;
-  filtroDesde      = '';
-  filtroHasta      = '';
+  filtroDesde       = '';
+  filtroHasta       = '';
   filtroEstadoCombo = '';
   filtroTipoCombo   = '';
 
-  /* ── Formulario priorizar ── */
   priorizarForm = {
     idSolicitud:   null as number | null,
     prioridad:     null as NivelPrioridad | null,
@@ -88,40 +84,36 @@ export class AdministrativoComponent implements OnInit {
     usarIA:        false,
   };
 
-  /* ── Formulario asignar ── */
   asignarForm = {
     idSolicitud:   null as number | null,
     idResponsable: null as number | null,
   };
 
-  /* ── Formulario atender ── */
   atenderForm = {
     idSolicitud: null as number | null,
     observacion: '',
   };
 
-  /* ── Formulario cerrar ── */
   cerrarForm = {
     idSolicitud:       null as number | null,
     observacionCierre: '',
   };
 
-  /* ── Resumen / Historial ── */
-  resumenIdSolicitud:  number | null = null;
+  resumenIdSolicitud:   number | null = null;
   historialIdSolicitud: number | null = null;
-  nombreUsuario = '';
 
   constructor(
     private solicitudSvc: SolicitudService,
     private historialSvc: HistorialSolicitudesService,
-  ) { this.nombreUsuario = localStorage.getItem('nombre') || 'Administrativo';}
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+  ) {
+    this.nombreUsuario = localStorage.getItem('nombre') || 'Administrativo';
+  }
 
   ngOnInit(): void {}
 
-  /* ═══════════════════════════════════════
-      NAV
-  ═══════════════════════════════════════ */
-
+  /* ── NAV ── */
   setTab(tab: TabKey): void {
     this.activeTab = tab;
     this.solicitudes = [];
@@ -136,70 +128,63 @@ export class AdministrativoComponent implements OnInit {
     this.solicitudSeleccionada = s;
   }
 
-  /* ═══════════════════════════════════════
-      HELPERS
-  ═══════════════════════════════════════ */
-
+  /* ── HELPERS ── */
   private handleError(err: any): void {
-    this.loading = false;
     this.errorMsg = err?.error?.message ?? 'Error al procesar la solicitud.';
     this.globalStatus = 'error';
     this.globalStatusText = 'Error';
+    this.cdr.markForCheck();
   }
 
   private handleSuccess(msg: string): void {
-    this.loading = false;
     this.successMsg = msg;
     this.globalStatus = 'ok';
     this.globalStatusText = 'OK';
-    setTimeout(() => { this.globalStatus = ''; this.globalStatusText = 'Sistema activo'; }, 3000);
+    this.cdr.markForCheck();
+    setTimeout(() => {
+      this.globalStatus = '';
+      this.globalStatusText = 'Sistema activo';
+      this.cdr.markForCheck();
+    }, 3000);
   }
 
-  /* ═══════════════════════════════════════
-      RF-07 CONSULTAS
-  ═══════════════════════════════════════ */
-
+  /* ── CONSULTAS ── */
   consultarPorEstado(): void {
     if (!this.filtroEstado) return;
-    this.loading = true;
     this.solicitudSvc.consultarPorEstado(this.filtroEstado as EstadoSolicitud).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
 
   consultarPorTipo(): void {
     if (!this.filtroTipo) return;
-    this.loading = true;
     this.solicitudSvc.consultarPorTipo(this.filtroTipo as TipoSolicitud).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
 
   consultarPorPrioridad(): void {
     if (!this.filtroPrioridad) return;
-    this.loading = true;
     this.solicitudSvc.consultarPorPrioridad(this.filtroPrioridad as NivelPrioridad).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
 
   consultarPorResponsable(): void {
     if (!this.filtroResponsableId) return;
-    this.loading = true;
     this.solicitudSvc.consultarPorResponsable(this.filtroResponsableId).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
 
   consultarPorSolicitante(): void {
     if (!this.filtroSolicitanteId) return;
-    this.loading = true;
     this.solicitudSvc.consultarPorSolicitante(this.filtroSolicitanteId).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -209,9 +194,8 @@ export class AdministrativoComponent implements OnInit {
       this.errorMsg = 'Selecciona ambas fechas.';
       return;
     }
-    this.loading = true;
     this.solicitudSvc.consultarPorRangoFechas(this.filtroDesde, this.filtroHasta).subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -221,53 +205,37 @@ export class AdministrativoComponent implements OnInit {
       this.errorMsg = 'Selecciona estado y tipo.';
       return;
     }
-    this.loading = true;
-    this.solicitudSvc
-      .consultarPorEstadoYTipo(
-        this.filtroEstadoCombo as EstadoSolicitud,
-        this.filtroTipoCombo as TipoSolicitud,
-      )
-      .subscribe({
-        next: data => { this.solicitudes = data; this.loading = false; },
-        error: err => this.handleError(err),
-      });
+    this.solicitudSvc.consultarPorEstadoYTipo(
+      this.filtroEstadoCombo as EstadoSolicitud,
+      this.filtroTipoCombo as TipoSolicitud,
+    ).subscribe({
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
+      error: err => this.handleError(err),
+    });
   }
 
-  /* ═══════════════════════════════════════
-      RF-03 PRIORIZAR
-  ═══════════════════════════════════════ */
-
+  /* ── PRIORIZAR ── */
   priorizarSolicitud(): void {
     const { idSolicitud, prioridad, impacto, justificacion, usarIA } = this.priorizarForm;
-    if (!idSolicitud) {
-      this.errorMsg = 'Ingresa el ID de la solicitud.';
-      return;
-    }
+    if (!idSolicitud) { this.errorMsg = 'Ingresa el ID de la solicitud.'; return; }
     if (!usarIA && (!prioridad || !impacto || !justificacion)) {
       this.errorMsg = 'Completa la prioridad, impacto y justificación, o activa la IA.';
       return;
     }
-    this.loading = true;
     this.solicitudResultado = null;
-    this.solicitudSvc
-      .priorizarSolicitud(idSolicitud, { prioridad: prioridad!, impacto, justificacion, usarIA })
-      .subscribe({
-        next: data => { this.solicitudResultado = data; this.handleSuccess('Solicitud priorizada correctamente.'); },
-        error: err => this.handleError(err),
-      });
+    this.solicitudSvc.priorizarSolicitud(idSolicitud, { prioridad: prioridad!, impacto, justificacion, usarIA }).subscribe({
+      next: data => { this.solicitudResultado = data; this.handleSuccess('Solicitud priorizada correctamente.'); },
+      error: err => this.handleError(err),
+    });
   }
 
-  /* ═══════════════════════════════════════
-      RF-05 ASIGNAR RESPONSABLE
-  ═══════════════════════════════════════ */
-
+  /* ── ASIGNAR ── */
   asignarResponsable(): void {
     const { idSolicitud, idResponsable } = this.asignarForm;
     if (!idSolicitud || !idResponsable) {
       this.errorMsg = 'Completa ID de solicitud e ID de responsable.';
       return;
     }
-    this.loading = true;
     this.solicitudResultado = null;
     this.solicitudSvc.asignarResponsable(idSolicitud, idResponsable).subscribe({
       next: data => { this.solicitudResultado = data; this.handleSuccess('Responsable asignado correctamente.'); },
@@ -275,17 +243,13 @@ export class AdministrativoComponent implements OnInit {
     });
   }
 
-  /* ═══════════════════════════════════════
-      ATENDER SOLICITUD
-  ═══════════════════════════════════════ */
-
+  /* ── ATENDER ── */
   atenderSolicitud(): void {
     const { idSolicitud, observacion } = this.atenderForm;
     if (!idSolicitud || !observacion) {
       this.errorMsg = 'Completa el ID y la observación.';
       return;
     }
-    this.loading = true;
     this.solicitudResultado = null;
     this.solicitudSvc.atenderSolicitud(idSolicitud, { observacion }).subscribe({
       next: data => { this.solicitudResultado = data; this.handleSuccess('Solicitud marcada como atendida.'); },
@@ -293,17 +257,13 @@ export class AdministrativoComponent implements OnInit {
     });
   }
 
-  /* ═══════════════════════════════════════
-      RF-08 CERRAR SOLICITUD
-  ═══════════════════════════════════════ */
-
+  /* ── CERRAR ── */
   cerrarSolicitud(): void {
     const { idSolicitud, observacionCierre } = this.cerrarForm;
     if (!idSolicitud || !observacionCierre) {
       this.errorMsg = 'Completa el ID y la observación de cierre.';
       return;
     }
-    this.loading = true;
     this.solicitudResultado = null;
     this.solicitudSvc.cerrarSolicitud(idSolicitud, { observacionCierre }).subscribe({
       next: data => { this.solicitudResultado = data; this.handleSuccess('Solicitud cerrada correctamente.'); },
@@ -311,25 +271,17 @@ export class AdministrativoComponent implements OnInit {
     });
   }
 
-  /* ═══════════════════════════════════════
-      MIS SOLICITUDES
-  ═══════════════════════════════════════ */
-
+  /* ── MIS SOLICITUDES ── */
   cargarMisSolicitudes(): void {
-    this.loading = true;
     this.solicitudSvc.obtenerMisSolicitudes().subscribe({
-      next: data => { this.solicitudes = data; this.loading = false; },
+      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
 
-  /* ═══════════════════════════════════════
-      RESUMEN IA — desde tabla
-  ═══════════════════════════════════════ */
-
+  /* ── RESUMEN IA ── */
   generarResumen(idSolicitud: number, event: Event): void {
     event.stopPropagation();
-    this.loading = true;
     this.solicitudSvc.generarResumenSolicitud(idSolicitud).subscribe({
       next: data => {
         this.resumenResultado = data;
@@ -340,14 +292,8 @@ export class AdministrativoComponent implements OnInit {
     });
   }
 
-  /* ─── desde tab Resumen IA ─── */
-
   generarResumenTab(): void {
-    if (!this.resumenIdSolicitud) {
-      this.errorMsg = 'Ingresa el ID de la solicitud.';
-      return;
-    }
-    this.loading = true;
+    if (!this.resumenIdSolicitud) { this.errorMsg = 'Ingresa el ID de la solicitud.'; return; }
     this.resumenResultado = null;
     this.solicitudSvc.generarResumenSolicitud(this.resumenIdSolicitud).subscribe({
       next: data => { this.resumenResultado = data; this.handleSuccess('Resumen generado correctamente.'); },
@@ -355,10 +301,7 @@ export class AdministrativoComponent implements OnInit {
     });
   }
 
-  /* ═══════════════════════════════════════
-      HISTORIAL — desde tabla
-  ═══════════════════════════════════════ */
-
+  /* ── HISTORIAL ── */
   verHistorial(idSolicitud: number, event: Event): void {
     event.stopPropagation();
     this.historialIdSolicitud = idSolicitud;
@@ -366,18 +309,18 @@ export class AdministrativoComponent implements OnInit {
     this.cargarHistorial();
   }
 
-  /* ─── desde tab Historial ─── */
-
   cargarHistorial(): void {
-    if (!this.historialIdSolicitud) {
-      this.errorMsg = 'Ingresa el ID de la solicitud.';
-      return;
-    }
-    this.loading = true;
+    if (!this.historialIdSolicitud) { this.errorMsg = 'Ingresa el ID de la solicitud.'; return; }
     this.historial = [];
     this.historialSvc.obtenerHistorialPorSolicitud(this.historialIdSolicitud).subscribe({
-      next: data => { this.historial = data; this.loading = false; },
+      next: data => { this.historial = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
+  }
+  cerrarSesion(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('nombre');
+    this.router.navigate(['/login']);
   }
 }
