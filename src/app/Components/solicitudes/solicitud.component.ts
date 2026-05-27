@@ -24,6 +24,7 @@ export class SolicitudComponent {
   error = '';
   mostrarTabla = false;
   nombreUsuario = '';
+  solicitudDetalle: SolicitudResponse | null = null;
 
   tiposSolicitud = Object.values(TipoSolicitud);
   canalesOrigen  = Object.values(CanalOrigen);
@@ -89,6 +90,14 @@ export class SolicitudComponent {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  verDetalle(s: SolicitudResponse): void {
+    this.solicitudDetalle = s;
+  }
+
+  cerrarDetalle(): void {
+    this.solicitudDetalle = null;
   }
 
   volverLogin(): void {
