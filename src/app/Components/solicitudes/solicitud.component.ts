@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
+import { Router } from '@angular/router';
+
 import { SolicitudService } from '../../Service/solicitud.service';
 
 import { SolicitudResponse } from '../../Models/solicitud-response.model';
@@ -57,13 +59,9 @@ export class SolicitudComponent {
   };
 
   constructor(
-    private solicitudService:
-      SolicitudService
+    private solicitudService: SolicitudService,
+    private router: Router
   ) {}
-
-  /* ==============================
-      OBTENER MIS SOLICITUDES
-  ============================== */
 
   obtenerMisSolicitudes(): void {
 
@@ -96,10 +94,6 @@ export class SolicitudComponent {
       });
   }
 
-  /* ==============================
-      REGISTRAR SOLICITUD
-  ============================== */
-
   registrarSolicitud(): void {
 
     this.mensaje = '';
@@ -129,6 +123,8 @@ export class SolicitudComponent {
 
           this.solicitudes.unshift(response);
 
+          this.mostrarTabla = true;
+
           this.nuevaSolicitud = {
 
             descripcion: '',
@@ -149,5 +145,14 @@ export class SolicitudComponent {
             'Error al registrar solicitud';
         }
       });
+  }
+
+  volverLogin(): void {
+
+    localStorage.removeItem('token');
+
+    localStorage.removeItem('rol');
+
+    this.router.navigate(['/']);
   }
 }
