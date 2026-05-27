@@ -12,6 +12,7 @@ import { HistorialSolicitudesResponse } from '../../Models/historial-solicitudes
 import { EstadoSolicitud } from '../../Models/Enums/estado-solicitud.enum';
 import { TipoSolicitud } from '../../Models/Enums/tipo-solicitud.enum';
 import { NivelPrioridad } from '../../Models/Enums/nivel-prioridad.enum';
+import {Router} from '@angular/router';
 
 type TabKey =
   | 'consultar'
@@ -105,6 +106,7 @@ export class AdministrativoComponent implements OnInit {
     private solicitudSvc: SolicitudService,
     private historialSvc: HistorialSolicitudesService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {
     this.nombreUsuario = localStorage.getItem('nombre') || 'Administrativo';
   }
@@ -314,5 +316,11 @@ export class AdministrativoComponent implements OnInit {
       next: data => { this.historial = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
+  }
+  cerrarSesion(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('nombre');
+    this.router.navigate(['/login']);
   }
 }
