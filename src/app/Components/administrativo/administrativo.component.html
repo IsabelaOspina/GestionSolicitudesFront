@@ -1,3 +1,4 @@
+<!-- admin-panel.component.html -->
 <div class="admin-shell">
 
   <!-- ══ SIDEBAR ══ -->
@@ -64,7 +65,6 @@
       </span>
     </header>
 
-    <div *ngIf="loading" class="loader-bar"><div class="loader-fill"></div></div>
 
     <div *ngIf="errorMsg" class="alert alert-error">
       <div class="alert-icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11" r=".75" fill="currentColor"/></svg></div>
@@ -259,6 +259,7 @@
             </select>
           </div>
 
+
           <!-- 3. Campos manuales — deshabilitados si usarIA = true -->
           <div class="form-field">
             <label>Impacto</label>
@@ -276,7 +277,7 @@
                       [disabled]="priorizarForm.usarIA"></textarea>
           </div>
 
-          <button class="btn-primary" (click)="priorizarSolicitud()" [disabled]="loading">
+          <button class="btn-primary" (click)="priorizarSolicitud()">
             {{ loading ? 'Procesando…' : (priorizarForm.usarIA ? 'Priorizar con IA' : 'Guardar prioridad') }}
           </button>
         </div>
@@ -311,7 +312,7 @@
             <label>ID del responsable</label>
             <input type="number" [(ngModel)]="asignarForm.idResponsable" placeholder="Ingresa el ID del agente" />
           </div>
-          <button class="btn-primary" (click)="asignarResponsable()" [disabled]="loading">
+          <button class="btn-primary" (click)="asignarResponsable()">
             {{ loading ? 'Asignando…' : 'Asignar responsable' }}
           </button>
         </div>
@@ -344,7 +345,7 @@
             <label>Observación</label>
             <textarea [(ngModel)]="atenderForm.observacion" rows="4" placeholder="Detalla la atención realizada…"></textarea>
           </div>
-          <button class="btn-primary" (click)="atenderSolicitud()" [disabled]="loading">
+          <button class="btn-primary" (click)="atenderSolicitud()">
             {{ loading ? 'Procesando…' : 'Marcar como atendida' }}
           </button>
         </div>
@@ -376,7 +377,7 @@
             <label>Observación de cierre</label>
             <textarea [(ngModel)]="cerrarForm.observacionCierre" rows="4" placeholder="Razón o detalle del cierre…"></textarea>
           </div>
-          <button class="btn-danger" (click)="cerrarSolicitud()" [disabled]="loading">
+          <button class="btn-danger" (click)="cerrarSolicitud()">
             {{ loading ? 'Cerrando…' : 'Cerrar solicitud' }}
           </button>
         </div>
@@ -395,7 +396,7 @@
     ══════════════════════════════════════ -->
     <section *ngIf="activeTab === 'mis-solicitudes'" class="tab-panel">
       <div class="section-actions">
-        <button class="btn-primary" (click)="cargarMisSolicitudes()" [disabled]="loading">
+        <button class="btn-primary" (click)="cargarMisSolicitudes()">
           {{ loading ? 'Cargando…' : 'Cargar mis solicitudes' }}
         </button>
       </div>
@@ -444,7 +445,7 @@
             <label>ID de la solicitud</label>
             <input type="number" [(ngModel)]="resumenIdSolicitud" placeholder="Ingresa el ID" />
           </div>
-          <button class="btn-ia" (click)="generarResumenTab()" [disabled]="loading">
+          <button class="btn-ia" (click)="generarResumenTab()">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 8.5l1.5 1.5 3.5-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
             {{ loading ? 'Generando…' : 'Generar resumen' }}
           </button>
@@ -475,7 +476,7 @@
             <label>ID de la solicitud</label>
             <div class="field-row">
               <input type="number" [(ngModel)]="historialIdSolicitud" placeholder="Ingresa el ID" />
-              <button class="btn-primary" (click)="cargarHistorial()" [disabled]="loading">Cargar historial</button>
+              <button class="btn-primary" (click)="cargarHistorial()">Cargar historial</button>
             </div>
           </div>
         </div>
