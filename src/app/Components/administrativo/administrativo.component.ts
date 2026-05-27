@@ -137,7 +137,10 @@ export class AdministrativoComponent implements OnInit {
 
   /* ── HELPERS ── */
   private handleError(err: any): void {
-    this.errorMsg = err?.error?.message ?? 'Error al procesar la solicitud.';
+    console.log('Error completo:', err);
+    console.log('err.error:', err.error);
+    console.log('err.error.error:', err.error?.error);
+    this.errorMsg = err?.error?.error ?? err?.error?.message ?? 'Error al procesar la solicitud.';
     this.globalStatus = 'error';
     this.globalStatusText = 'Error';
     this.cdr.markForCheck();
