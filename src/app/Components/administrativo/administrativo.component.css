@@ -698,3 +698,8 @@ button:disabled { opacity: .42; cursor: not-allowed; transform: none !important;
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+.tab-panel {
+  overflow-y: auto !important;
+  height: 0;
+}
