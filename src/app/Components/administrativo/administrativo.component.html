@@ -1,23 +1,18 @@
-<!-- admin-panel.component.html -->
+<!-- administrativo.component.html -->
 <div class="admin-shell">
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <div class="brand-logo">
-        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- fondo circular -->
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
           <circle cx="19" cy="19" r="18" fill="rgba(255,255,255,0.12)"/>
-          <!-- birrete base -->
           <path d="M19 10L7 16.5L19 23L31 16.5L19 10Z" fill="white" opacity="0.95"/>
-          <!-- franja central del birrete -->
           <path d="M19 10L7 16.5L19 23L31 16.5L19 10Z" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
-          <!-- cuerda colgante -->
           <path d="M31 16.5V23.5" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
           <circle cx="31" cy="25" r="1.4" fill="white" opacity="0.7"/>
-          <!-- líneas del documento debajo -->
           <rect x="13" y="24.5" width="12" height="1.5" rx="0.75" fill="white" opacity="0.55"/>
-          <rect x="15" y="27"   width="8"  height="1.5" rx="0.75" fill="white" opacity="0.35"/>
+          <rect x="15" y="27" width="8" height="1.5" rx="0.75" fill="white" opacity="0.35"/>
         </svg>
       </div>
       <div class="brand-text">
@@ -47,11 +42,13 @@
           <span class="user-name">{{ nombreUsuario }}</span>
           <span class="user-role">Sesión activa</span>
         </div>
-        <button class="logout-btn" (click)="cerrarSesion()">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Cerrar sesión</span>
-        </button>
       </div>
+      <button class="logout-btn" (click)="cerrarSesion()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Cerrar sesión</span>
+      </button>
     </div>
   </aside>
 
@@ -69,7 +66,6 @@
       </span>
     </header>
 
-
     <div *ngIf="errorMsg" class="alert alert-error">
       <div class="alert-icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11" r=".75" fill="currentColor"/></svg></div>
       <span>{{ errorMsg }}</span>
@@ -82,15 +78,11 @@
       <button class="alert-close" (click)="successMsg = ''"><svg width="13" height="13" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
     </div>
 
-    <!-- ══════════════════════════════════════
-         CONSULTAR
-    ══════════════════════════════════════ -->
+    <!-- ══ CONSULTAR ══ -->
     <section *ngIf="activeTab === 'consultar'" class="tab-panel">
-
       <div class="filter-card">
         <h2 class="card-title">Filtros de búsqueda</h2>
         <div class="filter-grid">
-
           <div class="filter-field">
             <label>Estado</label>
             <div class="field-row">
@@ -101,7 +93,6 @@
               <button class="btn-outline" (click)="consultarPorEstado()">Buscar</button>
             </div>
           </div>
-
           <div class="filter-field">
             <label>Tipo de solicitud</label>
             <div class="field-row">
@@ -112,7 +103,6 @@
               <button class="btn-outline" (click)="consultarPorTipo()">Buscar</button>
             </div>
           </div>
-
           <div class="filter-field">
             <label>Nivel de prioridad</label>
             <div class="field-row">
@@ -123,7 +113,6 @@
               <button class="btn-outline" (click)="consultarPorPrioridad()">Buscar</button>
             </div>
           </div>
-
           <div class="filter-field">
             <label>ID Responsable</label>
             <div class="field-row">
@@ -131,7 +120,6 @@
               <button class="btn-outline" (click)="consultarPorResponsable()">Buscar</button>
             </div>
           </div>
-
           <div class="filter-field">
             <label>ID Solicitante</label>
             <div class="field-row">
@@ -139,7 +127,6 @@
               <button class="btn-outline" (click)="consultarPorSolicitante()">Buscar</button>
             </div>
           </div>
-
           <div class="filter-field filter-field--wide">
             <label>Rango de fechas</label>
             <div class="field-row">
@@ -149,7 +136,6 @@
               <button class="btn-outline" (click)="consultarPorRangoFechas()">Buscar</button>
             </div>
           </div>
-
           <div class="filter-field filter-field--wide">
             <label>Estado + Tipo combinado</label>
             <div class="field-row">
@@ -164,7 +150,6 @@
               <button class="btn-outline" (click)="consultarPorEstadoYTipo()">Buscar</button>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -176,16 +161,9 @@
           <table class="data-table">
             <thead>
             <tr>
-              <th>ID</th>
-              <th>Descripción</th>
-              <th>Tipo</th>
-              <th>Estado</th>
-              <th>Prioridad</th>
-              <th>Canal</th>
-              <th>Solicitante</th>
-              <th>Responsable</th>
-              <th>Fecha límite</th>
-              <th>Acciones</th>
+              <th>ID</th><th>Descripción</th><th>Tipo</th><th>Estado</th>
+              <th>Prioridad</th><th>Canal</th><th>Solicitante</th>
+              <th>Responsable</th><th>Fecha límite</th><th>Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -220,9 +198,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         PRIORIZAR
-    ══════════════════════════════════════ -->
+    <!-- ══ PRIORIZAR ══ -->
     <section *ngIf="activeTab === 'priorizar'" class="tab-panel">
       <div class="form-card">
         <div class="form-card-header">
@@ -230,8 +206,6 @@
           <p class="card-desc">Asigna nivel de prioridad con o sin asistencia de inteligencia artificial</p>
         </div>
         <div class="form-body">
-
-          <!-- 1. Toggle IA — siempre primero -->
           <div class="form-field form-field--inline">
             <div>
               <label style="display:block; margin-bottom:2px;">Usar asistencia de IA</label>
@@ -242,19 +216,14 @@
               <span class="toggle-track"><span class="toggle-thumb"></span></span>
             </label>
           </div>
-
-          <!-- aviso cuando IA está activa -->
           <div class="ia-notice" *ngIf="priorizarForm.usarIA">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5.5" r=".7" fill="currentColor"/></svg>
             La IA analizará la solicitud y determinará el impacto y justificación de forma automática.
           </div>
-
-          <!-- 2. ID — siempre habilitado -->
           <div class="form-field">
             <label>ID de la solicitud</label>
             <input type="number" [(ngModel)]="priorizarForm.idSolicitud" placeholder="Ingresa el ID" />
           </div>
-
           <div class="form-field">
             <label>Nivel de prioridad</label>
             <select [(ngModel)]="priorizarForm.prioridad" [disabled]="priorizarForm.usarIA">
@@ -262,31 +231,23 @@
               <option *ngFor="let p of prioridades" [ngValue]="p">{{ p }}</option>
             </select>
           </div>
-
-
-          <!-- 3. Campos manuales — deshabilitados si usarIA = true -->
           <div class="form-field">
             <label>Impacto</label>
-            <textarea [(ngModel)]="priorizarForm.impacto"
-                      rows="3"
-                      placeholder="{{ priorizarForm.usarIA ? 'La IA completará este campo…' : 'Describe el impacto de esta solicitud…' }}"
+            <textarea [(ngModel)]="priorizarForm.impacto" rows="3"
+                      [placeholder]="priorizarForm.usarIA ? 'La IA completará este campo…' : 'Describe el impacto de esta solicitud…'"
                       [disabled]="priorizarForm.usarIA"></textarea>
           </div>
-
           <div class="form-field">
             <label>Justificación</label>
-            <textarea [(ngModel)]="priorizarForm.justificacion"
-                      rows="3"
-                      placeholder="{{ priorizarForm.usarIA ? 'La IA completará este campo…' : 'Justifica el nivel de prioridad asignado…' }}"
+            <textarea [(ngModel)]="priorizarForm.justificacion" rows="3"
+                      [placeholder]="priorizarForm.usarIA ? 'La IA completará este campo…' : 'Justifica el nivel de prioridad asignado…'"
                       [disabled]="priorizarForm.usarIA"></textarea>
           </div>
-
           <button class="btn-primary" (click)="priorizarSolicitud()">
-            {{ loading ? 'Procesando…' : (priorizarForm.usarIA ? 'Priorizar con IA' : 'Guardar prioridad') }}
+            {{ priorizarForm.usarIA ? 'Priorizar con IA' : 'Guardar prioridad' }}
           </button>
         </div>
       </div>
-
       <div *ngIf="solicitudResultado" class="result-card">
         <p class="result-label">Solicitud actualizada</p>
         <div class="result-grid">
@@ -298,9 +259,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         ASIGNAR
-    ══════════════════════════════════════ -->
+    <!-- ══ ASIGNAR ══ -->
     <section *ngIf="activeTab === 'asignar'" class="tab-panel">
       <div class="form-card">
         <div class="form-card-header">
@@ -316,9 +275,7 @@
             <label>ID del responsable</label>
             <input type="number" [(ngModel)]="asignarForm.idResponsable" placeholder="Ingresa el ID del agente" />
           </div>
-          <button class="btn-primary" (click)="asignarResponsable()">
-            {{ loading ? 'Asignando…' : 'Asignar responsable' }}
-          </button>
+          <button class="btn-primary" (click)="asignarResponsable()">Asignar responsable</button>
         </div>
       </div>
       <div *ngIf="solicitudResultado" class="result-card">
@@ -331,9 +288,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         ATENDER
-    ══════════════════════════════════════ -->
+    <!-- ══ ATENDER ══ -->
     <section *ngIf="activeTab === 'atender'" class="tab-panel">
       <div class="form-card">
         <div class="form-card-header">
@@ -349,9 +304,7 @@
             <label>Observación</label>
             <textarea [(ngModel)]="atenderForm.observacion" rows="4" placeholder="Detalla la atención realizada…"></textarea>
           </div>
-          <button class="btn-primary" (click)="atenderSolicitud()">
-            {{ loading ? 'Procesando…' : 'Marcar como atendida' }}
-          </button>
+          <button class="btn-primary" (click)="atenderSolicitud()">Marcar como atendida</button>
         </div>
       </div>
       <div *ngIf="solicitudResultado" class="result-card">
@@ -363,9 +316,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         CERRAR
-    ══════════════════════════════════════ -->
+    <!-- ══ CERRAR ══ -->
     <section *ngIf="activeTab === 'cerrar'" class="tab-panel">
       <div class="form-card">
         <div class="form-card-header">
@@ -381,9 +332,7 @@
             <label>Observación de cierre</label>
             <textarea [(ngModel)]="cerrarForm.observacionCierre" rows="4" placeholder="Razón o detalle del cierre…"></textarea>
           </div>
-          <button class="btn-danger" (click)="cerrarSolicitud()">
-            {{ loading ? 'Cerrando…' : 'Cerrar solicitud' }}
-          </button>
+          <button class="btn-danger" (click)="cerrarSolicitud()">Cerrar solicitud</button>
         </div>
       </div>
       <div *ngIf="solicitudResultado" class="result-card result-card--closed">
@@ -395,49 +344,8 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         MIS SOLICITUDES
-    ══════════════════════════════════════ -->
-    <section *ngIf="activeTab === 'mis-solicitudes'" class="tab-panel">
-      <div class="section-actions">
-        <button class="btn-primary" (click)="cargarMisSolicitudes()">
-          {{ loading ? 'Cargando…' : 'Cargar mis solicitudes' }}
-        </button>
-      </div>
 
-      <div class="table-card" *ngIf="solicitudes.length > 0">
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-            <tr>
-              <th>ID</th><th>Descripción</th><th>Tipo</th>
-              <th>Estado</th><th>Prioridad</th><th>Fecha límite</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let s of solicitudes">
-              <td><span class="id-pill">#{{ s.idSolicitud }}</span></td>
-              <td>{{ s.descripcion }}</td>
-              <td><span class="badge badge-tipo">{{ s.tipoSolicitud }}</span></td>
-              <td><span class="badge" [class]="'badge-estado-' + s.estadoSolicitud.toLowerCase()">{{ s.estadoSolicitud }}</span></td>
-              <td><span class="badge" [class]="s.nivelPrioridad ? 'badge-prio-' + s.nivelPrioridad.toLowerCase() : 'badge-neutral'">{{ s.nivelPrioridad || '—' }}</span></td>
-              <td class="muted-cell">{{ s.fechaLimite | date:'dd/MM/yyyy' }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div *ngIf="solicitudes.length === 0 && !loading" class="empty-state">
-        <div class="empty-icon"><svg width="42" height="42" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="26" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M13 16h14M13 22h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-        <p class="empty-title">Sin solicitudes</p>
-        <p class="empty-sub">No tienes solicitudes asignadas actualmente</p>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════
-         RESUMEN IA
-    ══════════════════════════════════════ -->
+    <!-- ══ RESUMEN IA ══ -->
     <section *ngIf="activeTab === 'resumen'" class="tab-panel">
       <div class="form-card">
         <div class="form-card-header">
@@ -451,11 +359,10 @@
           </div>
           <button class="btn-ia" (click)="generarResumenTab()">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 8.5l1.5 1.5 3.5-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            {{ loading ? 'Generando…' : 'Generar resumen' }}
+            Generar resumen
           </button>
         </div>
       </div>
-
       <div *ngIf="resumenResultado" class="resumen-card">
         <div class="resumen-card-top">
           <span class="ia-chip">IA</span>
@@ -466,9 +373,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         HISTORIAL
-    ══════════════════════════════════════ -->
+    <!-- ══ HISTORIAL ══ -->
     <section *ngIf="activeTab === 'historial'" class="tab-panel">
       <div class="form-card">
         <div class="form-card-header">
@@ -485,7 +390,6 @@
           </div>
         </div>
       </div>
-
       <div class="timeline" *ngIf="historial.length > 0">
         <div class="timeline-item" *ngFor="let h of historial; let i = index">
           <div class="timeline-connector">
@@ -502,11 +406,38 @@
           </div>
         </div>
       </div>
-
       <div *ngIf="historial.length === 0 && !loading" class="empty-state">
         <div class="empty-icon"><svg width="42" height="42" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.5"/><path d="M20 13v7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <p class="empty-title">Sin historial</p>
         <p class="empty-sub">Ingresa un ID para consultar el registro de acciones</p>
+      </div>
+    </section>
+
+    <!-- ══ REGISTRAR ACCIÓN ══ -->
+    <section *ngIf="activeTab === 'registrar-accion'" class="tab-panel">
+      <div class="form-card">
+        <div class="form-card-header">
+          <h2 class="card-title">Registrar acción</h2>
+          <p class="card-desc">Registra una acción realizada sobre una solicitud en el historial</p>
+        </div>
+        <div class="form-body">
+          <div class="form-field">
+            <label>ID de la solicitud</label>
+            <input type="number" [(ngModel)]="registrarAccionForm.idSolicitud" placeholder="Ingresa el ID" />
+          </div>
+          <div class="form-field">
+            <label>Acción realizada</label>
+            <input type="text" [(ngModel)]="registrarAccionForm.accionRealizada" placeholder="Ej: SOLICITUD REVISADA" />
+          </div>
+          <div class="form-field">
+            <label>Observaciones</label>
+            <textarea [(ngModel)]="registrarAccionForm.observaciones" rows="4" placeholder="Detalla las observaciones de la acción realizada…"></textarea>
+          </div>
+          <button class="btn-primary" (click)="registrarAccion()">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+            Registrar acción
+          </button>
+        </div>
       </div>
     </section>
 

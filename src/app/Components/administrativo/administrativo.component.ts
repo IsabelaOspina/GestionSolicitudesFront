@@ -8,11 +8,12 @@ import { HistorialSolicitudesService } from '../../Service/historial-solicitudes
 import { SolicitudResponse } from '../../Models/solicitud-response.model';
 import { ResumenSolicitudResponse } from '../../Models/resumen-solicitud-response.model';
 import { HistorialSolicitudesResponse } from '../../Models/historial-solicitudes-response.model';
+import { HistorialSolicitudesRequest } from '../../Models/historial-solicitudes-request.model';
 
 import { EstadoSolicitud } from '../../Models/Enums/estado-solicitud.enum';
 import { TipoSolicitud } from '../../Models/Enums/tipo-solicitud.enum';
 import { NivelPrioridad } from '../../Models/Enums/nivel-prioridad.enum';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 type TabKey =
   | 'consultar'
@@ -20,9 +21,9 @@ type TabKey =
   | 'asignar'
   | 'atender'
   | 'cerrar'
-  | 'mis-solicitudes'
   | 'resumen'
-  | 'historial';
+  | 'historial'
+  | 'registrar-accion';
 
 @Component({
   selector: 'app-admin-panel',
@@ -46,14 +47,14 @@ export class AdministrativoComponent implements OnInit {
   prioridades: NivelPrioridad[] = Object.values(NivelPrioridad);
 
   tabs: { key: TabKey; label: string; icon: string }[] = [
-    { key: 'consultar',       label: 'Consultar',       icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5l3 3" stroke-linecap="round"/></svg>' },
-    { key: 'priorizar',       label: 'Priorizar',       icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M4 6l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
-    { key: 'asignar',         label: 'Asignar',         icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke-linecap="round"/></svg>' },
-    { key: 'atender',         label: 'Atender',         icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
-    { key: 'cerrar',          label: 'Cerrar',          icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round"/></svg>' },
-    { key: 'mis-solicitudes', label: 'Mis Solicitudes', icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7h6M5 10h4" stroke-linecap="round"/></svg>' },
-    { key: 'resumen',         label: 'Resumen IA',      icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M6 6.5C6 5.12 6.9 4 8 4s2 1.12 2 2.5c0 1.5-2 3-2 3" stroke-linecap="round"/><circle cx="8" cy="12" r=".7" fill="currentColor" stroke="none"/></svg>' },
-    { key: 'historial',       label: 'Historial',       icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2.5 2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'consultar',        label: 'Consultar',         icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5l3 3" stroke-linecap="round"/></svg>' },
+    { key: 'priorizar',        label: 'Priorizar',         icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M4 6l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'asignar',          label: 'Asignar',           icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke-linecap="round"/></svg>' },
+    { key: 'atender',          label: 'Atender',           icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'cerrar',           label: 'Cerrar',            icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round"/></svg>' },
+    { key: 'resumen',          label: 'Resumen IA',        icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M6 6.5C6 5.12 6.9 4 8 4s2 1.12 2 2.5c0 1.5-2 3-2 3" stroke-linecap="round"/><circle cx="8" cy="12" r=".7" fill="currentColor" stroke="none"/></svg>' },
+    { key: 'historial',        label: 'Historial',         icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2.5 2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { key: 'registrar-accion', label: 'Registrar Acción',  icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>' },
   ];
 
   get currentTabLabel(): string {
@@ -97,6 +98,12 @@ export class AdministrativoComponent implements OnInit {
   cerrarForm = {
     idSolicitud:       null as number | null,
     observacionCierre: '',
+  };
+
+  registrarAccionForm = {
+    idSolicitud:     null as number | null,
+    accionRealizada: '',
+    observaciones:   '',
   };
 
   resumenIdSolicitud:   number | null = null;
@@ -190,10 +197,7 @@ export class AdministrativoComponent implements OnInit {
   }
 
   consultarPorRangoFechas(): void {
-    if (!this.filtroDesde || !this.filtroHasta) {
-      this.errorMsg = 'Selecciona ambas fechas.';
-      return;
-    }
+    if (!this.filtroDesde || !this.filtroHasta) { this.errorMsg = 'Selecciona ambas fechas.'; return; }
     this.solicitudSvc.consultarPorRangoFechas(this.filtroDesde, this.filtroHasta).subscribe({
       next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
@@ -201,10 +205,7 @@ export class AdministrativoComponent implements OnInit {
   }
 
   consultarPorEstadoYTipo(): void {
-    if (!this.filtroEstadoCombo || !this.filtroTipoCombo) {
-      this.errorMsg = 'Selecciona estado y tipo.';
-      return;
-    }
+    if (!this.filtroEstadoCombo || !this.filtroTipoCombo) { this.errorMsg = 'Selecciona estado y tipo.'; return; }
     this.solicitudSvc.consultarPorEstadoYTipo(
       this.filtroEstadoCombo as EstadoSolicitud,
       this.filtroTipoCombo as TipoSolicitud,
@@ -219,8 +220,7 @@ export class AdministrativoComponent implements OnInit {
     const { idSolicitud, prioridad, impacto, justificacion, usarIA } = this.priorizarForm;
     if (!idSolicitud) { this.errorMsg = 'Ingresa el ID de la solicitud.'; return; }
     if (!usarIA && (!prioridad || !impacto || !justificacion)) {
-      this.errorMsg = 'Completa la prioridad, impacto y justificación, o activa la IA.';
-      return;
+      this.errorMsg = 'Completa la prioridad, impacto y justificación, o activa la IA.'; return;
     }
     this.solicitudResultado = null;
     this.solicitudSvc.priorizarSolicitud(idSolicitud, { prioridad: prioridad!, impacto, justificacion, usarIA }).subscribe({
@@ -231,11 +231,10 @@ export class AdministrativoComponent implements OnInit {
 
   /* ── ASIGNAR ── */
   asignarResponsable(): void {
+    console.log('Token:', localStorage.getItem('token'));
+    console.log('Rol guardado:', localStorage.getItem('rol'));
     const { idSolicitud, idResponsable } = this.asignarForm;
-    if (!idSolicitud || !idResponsable) {
-      this.errorMsg = 'Completa ID de solicitud e ID de responsable.';
-      return;
-    }
+    if (!idSolicitud || !idResponsable) { this.errorMsg = 'Completa ID de solicitud e ID de responsable.'; return; }
     this.solicitudResultado = null;
     this.solicitudSvc.asignarResponsable(idSolicitud, idResponsable).subscribe({
       next: data => { this.solicitudResultado = data; this.handleSuccess('Responsable asignado correctamente.'); },
@@ -246,10 +245,7 @@ export class AdministrativoComponent implements OnInit {
   /* ── ATENDER ── */
   atenderSolicitud(): void {
     const { idSolicitud, observacion } = this.atenderForm;
-    if (!idSolicitud || !observacion) {
-      this.errorMsg = 'Completa el ID y la observación.';
-      return;
-    }
+    if (!idSolicitud || !observacion) { this.errorMsg = 'Completa el ID y la observación.'; return; }
     this.solicitudResultado = null;
     this.solicitudSvc.atenderSolicitud(idSolicitud, { observacion }).subscribe({
       next: data => { this.solicitudResultado = data; this.handleSuccess('Solicitud marcada como atendida.'); },
@@ -260,21 +256,10 @@ export class AdministrativoComponent implements OnInit {
   /* ── CERRAR ── */
   cerrarSolicitud(): void {
     const { idSolicitud, observacionCierre } = this.cerrarForm;
-    if (!idSolicitud || !observacionCierre) {
-      this.errorMsg = 'Completa el ID y la observación de cierre.';
-      return;
-    }
+    if (!idSolicitud || !observacionCierre) { this.errorMsg = 'Completa el ID y la observación de cierre.'; return; }
     this.solicitudResultado = null;
     this.solicitudSvc.cerrarSolicitud(idSolicitud, { observacionCierre }).subscribe({
       next: data => { this.solicitudResultado = data; this.handleSuccess('Solicitud cerrada correctamente.'); },
-      error: err => this.handleError(err),
-    });
-  }
-
-  /* ── MIS SOLICITUDES ── */
-  cargarMisSolicitudes(): void {
-    this.solicitudSvc.obtenerMisSolicitudes().subscribe({
-      next: data => { this.solicitudes = data; this.cdr.markForCheck(); },
       error: err => this.handleError(err),
     });
   }
@@ -283,11 +268,7 @@ export class AdministrativoComponent implements OnInit {
   generarResumen(idSolicitud: number, event: Event): void {
     event.stopPropagation();
     this.solicitudSvc.generarResumenSolicitud(idSolicitud).subscribe({
-      next: data => {
-        this.resumenResultado = data;
-        this.activeTab = 'resumen';
-        this.handleSuccess('Resumen generado.');
-      },
+      next: data => { this.resumenResultado = data; this.activeTab = 'resumen'; this.handleSuccess('Resumen generado.'); },
       error: err => this.handleError(err),
     });
   }
@@ -317,6 +298,34 @@ export class AdministrativoComponent implements OnInit {
       error: err => this.handleError(err),
     });
   }
+
+  /* ── REGISTRAR ACCIÓN ── */
+  registrarAccion(): void {
+    const { idSolicitud, accionRealizada, observaciones } = this.registrarAccionForm;
+    if (!idSolicitud || !accionRealizada.trim() || !observaciones.trim()) {
+      this.errorMsg = 'Completa todos los campos.';
+      return;
+    }
+    const dto: HistorialSolicitudesRequest = {
+      idSolicitud,
+      accionRealizada,
+      observaciones,
+      fechaHora: new Date().toISOString().substring(0, 19),
+    };
+    console.log('DTO enviado:', JSON.stringify(dto));
+    this.historialSvc.registrarAccion(idSolicitud, dto).subscribe({
+      next: () => {
+        this.handleSuccess('Acción registrada correctamente.');
+        this.registrarAccionForm = { idSolicitud: null, accionRealizada: '', observaciones: '' };
+      },
+      error: err => {
+        console.log('Error response:', err.error);
+        this.handleError(err);
+      },
+    });
+  }
+
+  /* ── CERRAR SESIÓN ── */
   cerrarSesion(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('rol');

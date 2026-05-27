@@ -130,7 +130,7 @@
             </div>
             <div>
               <h2 class="card-title">Historial de solicitudes</h2>
-              <p class="card-desc">Consulta el estado de tus solicitudes registradas</p>
+              <p class="card-desc">Haz clic en una fila para ver el detalle completo</p>
             </div>
           </div>
           <button class="btn-outline btn-sm" (click)="obtenerMisSolicitudes()">
@@ -139,13 +139,11 @@
           </button>
         </div>
 
-        <!-- cargando -->
         <div *ngIf="cargando" class="loading-state">
           <div class="spinner"></div>
           <span>Cargando solicitudes…</span>
         </div>
 
-        <!-- tabla -->
         <div *ngIf="!cargando && solicitudes.length > 0" class="table-wrapper">
           <table class="data-table">
             <thead>
@@ -156,6 +154,7 @@
               <th>Estado</th>
               <th>Prioridad</th>
               <th>Fecha</th>
+              <th>Detalle</th>
             </tr>
             </thead>
             <tbody>
@@ -166,12 +165,14 @@
               <td><span class="badge" [class]="'badge-estado-' + s.estadoSolicitud.toLowerCase()">{{ s.estadoSolicitud }}</span></td>
               <td><span class="badge" [class]="s.nivelPrioridad ? 'badge-prio-' + s.nivelPrioridad.toLowerCase() : 'badge-neutral'">{{ s.nivelPrioridad || '—' }}</span></td>
               <td class="muted-cell">{{ s.fechaHoraRegistro | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <button class="btn-action" (click)="verDetalle(s)">Ver detalle</button>
+              </td>
             </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- vacío -->
         <div *ngIf="!cargando && mostrarTabla && solicitudes.length === 0" class="empty-state">
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="26" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M13 16h14M13 22h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <p class="empty-title">Sin solicitudes</p>
@@ -187,4 +188,75 @@
 
     </div>
   </main>
+
+  <!-- ══ MODAL DETALLE ══ -->
+  <div class="modal-overlay" *ngIf="solicitudDetalle" (click)="cerrarDetalle()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="id-pill">#{{ solicitudDetalle.idSolicitud }}</span>
+          <h2 class="modal-title">Detalle de solicitud</h2>
+        </div>
+        <button class="modal-close" (click)="cerrarDetalle()">
+          <svg width="16" height="16" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Estado y prioridad -->
+        <div class="detail-badges">
+          <span class="badge" [class]="'badge-estado-' + solicitudDetalle.estadoSolicitud.toLowerCase()">
+            {{ solicitudDetalle.estadoSolicitud }}
+          </span>
+          <span class="badge" [class]="solicitudDetalle.nivelPrioridad ? 'badge-prio-' + solicitudDetalle.nivelPrioridad.toLowerCase() : 'badge-neutral'">
+            {{ solicitudDetalle.nivelPrioridad || 'Sin prioridad' }}
+          </span>
+          <span class="badge badge-tipo">{{ solicitudDetalle.tipoSolicitud }}</span>
+        </div>
+
+        <!-- Descripción -->
+        <div class="detail-section">
+          <p class="detail-label">Descripción</p>
+          <p class="detail-value detail-desc">{{ solicitudDetalle.descripcion }}</p>
+        </div>
+
+        <!-- Grid de datos -->
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Canal de origen</span>
+            <span class="detail-value">{{ solicitudDetalle.canalOrigen }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Fecha de registro</span>
+            <span class="detail-value">{{ solicitudDetalle.fechaHoraRegistro | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Fecha límite</span>
+            <span class="detail-value">{{ solicitudDetalle.fechaLimite ? (solicitudDetalle.fechaLimite | date:'dd/MM/yyyy') : '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Solicitante</span>
+            <span class="detail-value">{{ solicitudDetalle.solicitanteNombre || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Responsable asignado</span>
+            <span class="detail-value">{{ solicitudDetalle.nombreResponsable || 'Sin asignar' }}</span>
+          </div>
+          <div class="detail-item" *ngIf="solicitudDetalle.justificacionPrioridad">
+            <span class="detail-label">Justificación de prioridad</span>
+            <span class="detail-value">{{ solicitudDetalle.justificacionPrioridad }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-outline" (click)="cerrarDetalle()">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+
 </div>
